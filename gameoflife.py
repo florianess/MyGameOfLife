@@ -4,15 +4,33 @@ from tkinter import *
 
 taille=30
 d=15
-
-tab = [[0]*taille for e in range(taille)]
-for i in range(int((taille/2)**2)):
-    tab[random.randint(1,taille-1)][random.randint(1,taille-1)] = 1
-ntab = np.copy(tab)
-vois = [[0]*taille for e in range(taille)]
-
 root = Tk()
 canvas = Canvas(root, width=d*(taille-1), height=d*(taille-1), background='white')
+vois = []
+tab = []
+ntab = []
+
+def start():
+
+    global vois
+    vois = [[0]*taille for e in range(taille)]
+    global tab
+    tab = [[0]*taille for e in range(taille)]
+    for i in range(int((taille/2)**2)):
+        tab[random.randint(1,taille-1)][random.randint(1,taille-1)] = 1
+    global ntab
+    ntab = np.copy(tab)
+    dessin(tab,ntab)
+    vie()
+    #print(np.matrix(ntab))
+    dessin(tab,ntab)
+    while not np.array_equal(tab,ntab):
+        time.sleep(.1)
+        tab = np.copy(ntab)
+        vie()
+        #print(np.matrix(ntab))
+        dessin(tab,ntab)
+
 
 def vie():
     for x in range(taille):
@@ -52,14 +70,3 @@ def dessin(tab,ntab):
                     canvas.create_rectangle(y*d-d,x*d-d,y*d,x*d, fill='white', outline='white')
     canvas.pack()
     root.update()
-print(np.matrix(tab))
-dessin(tab,ntab)
-vie()
-#print(np.matrix(ntab))
-dessin(tab,ntab)
-while not np.array_equal(tab,ntab):
-    time.sleep(.1)
-    tab = np.copy(ntab)
-    vie()
-    #print(np.matrix(ntab))
-    dessin(tab,ntab)

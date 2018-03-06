@@ -1,0 +1,3 @@
+import gameoflife
+
+gameoflife.start()
