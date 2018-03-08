@@ -10,8 +10,12 @@ vois = []
 tab = []
 ntab = []
 
-def start():
+def start(ntaille,nd):
 
+    global taille
+    taille = ntaille
+    global d
+    d = nd
     global vois
     vois = [[0]*taille for e in range(taille)]
     global tab
