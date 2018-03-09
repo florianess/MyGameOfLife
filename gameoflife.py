@@ -2,26 +2,24 @@ import numpy as np
 import time, random
 from tkinter import *
 
-taille=30
-d=15
 root = Tk()
-canvas = Canvas(root, width=d*(taille-1), height=d*(taille-1), background='white')
+canvas = Canvas(root, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
 vois = []
 tab = []
 ntab = []
 
-def start(ntaille,nd):
+def start(newNumber,newSize):
 
-    global taille
-    taille = ntaille
-    global d
-    d = nd
+    global numberSquare
+    numberSquare = newNumber
+    global size
+    size = newSize
     global vois
-    vois = [[0]*taille for e in range(taille)]
+    vois = [[0]*numberSquare for e in range(numberSquare)]
     global tab
-    tab = [[0]*taille for e in range(taille)]
-    for i in range(int((taille/2)**2)):
-        tab[random.randint(1,taille-1)][random.randint(1,taille-1)] = 1
+    tab = [[0]*numberSquare for e in range(numberSquare)]
+    for i in range(int((numberSquare/2)**2)):
+        tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
     global ntab
     ntab = np.copy(tab)
     dessin(tab,ntab)
@@ -37,8 +35,8 @@ def start(ntaille,nd):
 
 
 def vie():
-    for x in range(taille):
-        for y in range(taille):
+    for x in range(numberSquare):
+        for y in range(numberSquare):
             i = adj(x,y)
             vois[x][y]=i
             if (i<2 or i>3) and tab[x][y]==1:
@@ -48,7 +46,7 @@ def vie():
 
 def adj(x,y):
     i = 0
-    if x > 0 and y > 0 and x < taille-1 and y < taille-1:
+    if x > 0 and y > 0 and x < numberSquare-1 and y < numberSquare-1:
         i = test(i,x,y,-1)
         i = test(i,x,y,1)
     return i
@@ -65,12 +63,12 @@ def test(i,x,y,e):
     return i
 
 def dessin(tab,ntab):
-    for x in range(taille):
-        for y in range(taille):
+    for x in range(numberSquare):
+        for y in range(numberSquare):
             if ntab[x][y] != tab[x][y]:
                 if ntab[x][y] == 1:
-                    canvas.create_rectangle(y*d-d,x*d-d,y*d,x*d, fill='black')
+                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
                 else:
-                    canvas.create_rectangle(y*d-d,x*d-d,y*d,x*d, fill='white', outline='white')
+                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
     canvas.pack()
     root.update()
