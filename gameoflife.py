@@ -2,18 +2,22 @@ import numpy as np
 import time, random
 from tkinter import *
 
+numberSquare = 0
+size = 0
 root = Tk()
-canvas = Canvas(root, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
+canvas = 0
 vois = []
 tab = []
 ntab = []
 
 def start(newNumber,newSize):
-
+    
     global numberSquare
     numberSquare = newNumber
     global size
     size = newSize
+    global canvas
+    canvas = Canvas(root, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
     global vois
     vois = [[0]*numberSquare for e in range(numberSquare)]
     global tab
@@ -22,19 +26,19 @@ def start(newNumber,newSize):
         tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
     global ntab
     ntab = np.copy(tab)
-    dessin(tab,ntab)
-    vie()
+    draw(tab,ntab)
+    lifeCycle()
     #print(np.matrix(ntab))
-    dessin(tab,ntab)
+    draw(tab,ntab)
     while not np.array_equal(tab,ntab):
         time.sleep(.1)
         tab = np.copy(ntab)
-        vie()
-        #print(np.matrix(ntab))
-        dessin(tab,ntab)
+        lifeCycle()
+        print(np.matrix(ntab))
+        draw(tab,ntab)
 
 
-def vie():
+def lifeCycle():
     for x in range(numberSquare):
         for y in range(numberSquare):
             i = adj(x,y)
@@ -62,7 +66,7 @@ def test(i,x,y,e):
         i+=1
     return i
 
-def dessin(tab,ntab):
+def draw(tab,ntab):
     for x in range(numberSquare):
         for y in range(numberSquare):
             if ntab[x][y] != tab[x][y]:
