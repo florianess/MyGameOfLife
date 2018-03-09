@@ -10,8 +10,8 @@ vois = []
 tab = []
 ntab = []
 
-def start(newNumber,newSize):
-    
+def start(newNumber, newSize):
+
     global numberSquare
     numberSquare = newNumber
     global size
@@ -22,8 +22,19 @@ def start(newNumber,newSize):
     vois = [[0]*numberSquare for e in range(numberSquare)]
     global tab
     tab = [[0]*numberSquare for e in range(numberSquare)]
-    for i in range(int((numberSquare/2)**2)):
-        tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
+
+    randomly = input("Generate randomly the cells? (Y or N)\n")
+    if (randomly == "Y"):
+        for i in range(int((numberSquare/2)**2)):
+            tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
+        begin()
+    else:
+        print("Incoming feature")
+
+
+def begin():
+
+    global tab
     global ntab
     ntab = np.copy(tab)
     draw(tab,ntab)
@@ -34,7 +45,7 @@ def start(newNumber,newSize):
         time.sleep(.1)
         tab = np.copy(ntab)
         lifeCycle()
-        print(np.matrix(ntab))
+        #print(np.matrix(ntab))
         draw(tab,ntab)
 
 
