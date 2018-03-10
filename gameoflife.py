@@ -29,8 +29,36 @@ def start(newNumber, newSize):
             tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
         begin()
     else:
-        print("Incoming feature")
+        selection()
 
+def callback(event):
+    x = int(event.x/size)
+    y = int(event.y/size)
+    print ("clicked at",x , y)
+    canvas.create_rectangle(x*size,y*size,x*size+size,y*size+size, fill='black')
+    global tab
+    tab[y][x] = 1
+    print (np.matrix(tab))
+
+def resetCell():
+    print('RESET')
+    global tab
+    for x in range(numberSquare):
+        for y in range(numberSquare):
+            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='black')
+            tab[x][y]=0
+
+def selection():
+    for x in range(numberSquare):
+        for y in range(numberSquare):
+            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='black')
+    canvas.bind("<Button-1>", callback)
+    canvas.pack()
+    run = Button(root,text='RUN',command=root.quit)
+    run.pack()
+    resetC = Button(root,text = 'RESET',command=begin)
+    resetC.pack()
+    root.mainloop()
 
 def begin():
 
