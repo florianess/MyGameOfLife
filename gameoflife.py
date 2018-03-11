@@ -27,9 +27,18 @@ def start(newNumber, newSize):
     if (randomly == "Y"):
         for i in range(int((numberSquare/2)**2)):
             tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
-        begin()
+        for x in range(numberSquare):
+            for y in range(numberSquare):
+                if tab[x][y] == 1:
+                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
+                else:
+                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
+        canvas.pack()
     else:
         selection()
+    run = Button(root,text='RUN',command=begin)
+    run.pack()
+    root.mainloop()
 
 def callback(event):
     x = int(event.x/size)
@@ -54,8 +63,6 @@ def selection():
             canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='black')
     canvas.bind("<Button-1>", callback)
     canvas.pack()
-    run = Button(root,text='RUN',command=begin)
-    run.pack()
     resetC = Button(root,text = 'RESET',command=resetCell)
     resetC.pack()
     root.mainloop()
@@ -65,16 +72,16 @@ def begin():
     global tab
     global ntab
     ntab = np.copy(tab)
-    draw(tab,ntab)
+    draw()
     lifeCycle()
     #print(np.matrix(ntab))
-    draw(tab,ntab)
+    draw()
     while not np.array_equal(tab,ntab):
         time.sleep(.1)
         tab = np.copy(ntab)
         lifeCycle()
         #print(np.matrix(ntab))
-        draw(tab,ntab)
+        draw()
 
 
 def lifeCycle():
@@ -105,7 +112,9 @@ def test(i,x,y,e):
         i+=1
     return i
 
-def draw(tab,ntab):
+def draw():
+    global ntab
+    global tab
     for x in range(numberSquare):
         for y in range(numberSquare):
             if ntab[x][y] != tab[x][y]:
@@ -114,4 +123,3 @@ def draw(tab,ntab):
                 else:
                     canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
     canvas.pack()
-    root.update()
