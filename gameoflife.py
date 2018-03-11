@@ -54,9 +54,9 @@ def selection():
             canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='black')
     canvas.bind("<Button-1>", callback)
     canvas.pack()
-    run = Button(root,text='RUN',command=root.quit)
+    run = Button(root,text='RUN',command=begin)
     run.pack()
-    resetC = Button(root,text = 'RESET',command=begin)
+    resetC = Button(root,text = 'RESET',command=resetCell)
     resetC.pack()
     root.mainloop()
 
