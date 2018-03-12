@@ -32,6 +32,8 @@ def start(newNumber, newSize):
     run.pack()
     rand = Button(root,text='RANDOM',command=randomize)
     rand.pack()
+    close = Button(root,text='CLOSE',command=root.quit)
+    close.pack()
     root.mainloop()
 
 def callback(event):
@@ -126,3 +128,4 @@ def draw():
                 else:
                     canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
     canvas.pack()
+    root.update()
