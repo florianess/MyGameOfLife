@@ -25,47 +25,37 @@ def start(newNumber, newSize):
 
     randomly = input("Generate randomly the cells? (Y or N)\n")
     if (randomly == "Y"):
-        for i in range(int((numberSquare/2)**2)):
-            tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
-        for x in range(numberSquare):
-            for y in range(numberSquare):
-                if tab[x][y] == 1:
-                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
-                else:
-                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-        canvas.pack()
+        randomize()
     else:
         selection()
     run = Button(root,text='RUN',command=begin)
     run.pack()
+    rand = Button(root,text='RANDOM',command=randomize)
+    rand.pack()
     root.mainloop()
 
 def callback(event):
     x = int(event.x/size)
     y = int(event.y/size)
-    print ("clicked at",x , y)
     canvas.create_rectangle(x*size,y*size,x*size+size,y*size+size, fill='black')
     global tab
     tab[y][x] = 1
-    print (np.matrix(tab))
 
 def resetCell():
-    print('RESET')
     global tab
     for x in range(numberSquare):
         for y in range(numberSquare):
-            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='black')
+            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
             tab[x][y]=0
 
 def selection():
     for x in range(numberSquare):
         for y in range(numberSquare):
-            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='black')
+            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
     canvas.bind("<Button-1>", callback)
     canvas.pack()
     resetC = Button(root,text = 'RESET',command=resetCell)
     resetC.pack()
-    root.mainloop()
 
 def begin():
 
@@ -100,6 +90,19 @@ def adj(x,y):
         i = test(i,x,y,-1)
         i = test(i,x,y,1)
     return i
+
+def randomize():
+    resetCell()
+    global tab
+    for i in range(int((numberSquare/2)**2)):
+        tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
+    for x in range(numberSquare):
+        for y in range(numberSquare):
+            if tab[x][y] == 1:
+                canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
+            else:
+                canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
+    canvas.pack()
 
 def test(i,x,y,e):
     if tab[x+e][y+e] == 1:
