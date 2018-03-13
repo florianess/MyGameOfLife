@@ -4,36 +4,38 @@ from tkinter import *
 
 numberSquare = 0
 size = 0
-root = Tk()
+root = ''
 canvas = 0
 vois = []
 tab = []
 ntab = []
+f2 = ""
 
-def start(newNumber, newSize):
+def start(newNumber, newSize,randomly, pRoot):
 
+    global root
+    root = pRoot
+    global f2
+    f2 = Frame()
     global numberSquare
     numberSquare = newNumber
     global size
     size = newSize
     global canvas
-    canvas = Canvas(root, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
+    canvas = Canvas(f2, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
     global vois
     vois = [[0]*numberSquare for e in range(numberSquare)]
     global tab
     tab = [[0]*numberSquare for e in range(numberSquare)]
-
-    randomly = input("Generate randomly the cells? (Y or N)\n")
-    if (randomly == "Y"):
+    if (randomly):
         randomize()
     else:
         selection()
-    run = Button(root,text='RUN',command=begin)
-    run.pack()
-    rand = Button(root,text='RANDOM',command=randomize)
-    rand.pack()
-    close = Button(root,text='CLOSE',command=root.quit)
-    close.pack()
+    run = Button(f2,text='RUN',command=begin)
+    run.grid(row=2,columnspan=2,sticky='n')
+    rand = Button(f2,text='RANDOM',command=randomize)
+    rand.grid(row=1,column=1)
+    f2.pack()
     root.mainloop()
 
 def callback(event):
@@ -55,9 +57,9 @@ def selection():
         for y in range(numberSquare):
             canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
     canvas.bind("<Button-1>", callback)
-    canvas.pack()
-    resetC = Button(root,text = 'RESET',command=resetCell)
-    resetC.pack()
+    canvas.grid(row=0,columnspan=2)
+    resetC = Button(f2,text = 'RESET',command=resetCell)
+    resetC.grid(row=1,column=0)
 
 def begin():
 
@@ -104,7 +106,7 @@ def randomize():
                 canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
             else:
                 canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-    canvas.pack()
+    canvas.grid(row=0,columnspan=2)
 
 def test(i,x,y,e):
     if tab[x+e][y+e] == 1:
@@ -127,5 +129,5 @@ def draw():
                     canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
                 else:
                     canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-    canvas.pack()
+    canvas.grid(row=0,columnspan=2)
     root.update()
