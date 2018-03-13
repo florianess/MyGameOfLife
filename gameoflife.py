@@ -24,9 +24,9 @@ def start(newNumber, newSize,randomly, pRoot):
     global canvas
     canvas = Canvas(f2, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
     global vois
-    vois = [[0]*numberSquare for e in range(numberSquare)]
+    vois = [[0]*(numberSquare+2) for e in range(numberSquare+2)]
     global tab
-    tab = [[0]*numberSquare for e in range(numberSquare)]
+    tab = [[0]*(numberSquare+2) for e in range(numberSquare+2)]
     if (randomly):
         randomize()
     else:
@@ -43,14 +43,14 @@ def callback(event):
     y = int(event.y/size)
     canvas.create_rectangle(x*size,y*size,x*size+size,y*size+size, fill='black')
     global tab
-    tab[y][x] = 1
+    tab[y+1][x+1] = 1
 
 def resetCell():
     global tab
     for x in range(numberSquare):
         for y in range(numberSquare):
             canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-            tab[x][y]=0
+            tab[x+1][y+1]=0
 
 def selection():
     for x in range(numberSquare):
@@ -79,8 +79,8 @@ def begin():
 
 
 def lifeCycle():
-    for x in range(numberSquare):
-        for y in range(numberSquare):
+    for x in range(numberSquare+2):
+        for y in range(numberSquare+2):
             i = adj(x,y)
             vois[x][y]=i
             if (i<2 or i>3) and tab[x][y]==1:
@@ -90,7 +90,7 @@ def lifeCycle():
 
 def adj(x,y):
     i = 0
-    if x > 0 and y > 0 and x < numberSquare-1 and y < numberSquare-1:
+    if x > 1 and y > 1 and x < numberSquare and y < numberSquare:
         i = test(i,x,y,-1)
         i = test(i,x,y,1)
     return i
@@ -98,11 +98,11 @@ def adj(x,y):
 def randomize():
     resetCell()
     global tab
-    for i in range(int((numberSquare/2)**2)):
-        tab[random.randint(1,numberSquare-1)][random.randint(1,numberSquare-1)] = 1
+    for i in range(int(((numberSquare+2)/2)**2)):
+        tab[random.randint(1,numberSquare+1)][random.randint(1,numberSquare+1)] = 1
     for x in range(numberSquare):
         for y in range(numberSquare):
-            if tab[x][y] == 1:
+            if tab[x+1][y+1] == 1:
                 canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
             else:
                 canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
@@ -124,8 +124,8 @@ def draw():
     global tab
     for x in range(numberSquare):
         for y in range(numberSquare):
-            if ntab[x][y] != tab[x][y]:
-                if ntab[x][y] == 1:
+            if ntab[x+1][y+1] != tab[x+1][y+1]:
+                if ntab[x+1][y+1] == 1:
                     canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
                 else:
                     canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
