@@ -1,4 +1,4 @@
-import gameoflife
+import view
 from tkinter import *
 
 def start():
@@ -6,7 +6,7 @@ def start():
     nSize = int(size.get())
     randoml = intGr.get()
     f1.destroy()
-    gameoflife.start(nNumberSquare,nSize,randoml,root)
+    view.start(nNumberSquare,nSize,randoml,root)
 
 root = Tk()
 f1 = Frame()
@@ -28,8 +28,6 @@ intGr.set(vals[0])
 for i in range(2):
     b = Radiobutton(f1, variable=intGr, text=etiqs[i], value=vals[i])
     b.grid(row=1, column=i)
-
-#randomly = input("Generate randomly the cells? (Y or N)\n")
 
 start = Button(f1,text='START',command=start)
 

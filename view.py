@@ -1,6 +1,7 @@
 import numpy as np
 import time, random
 from tkinter import *
+import core
 
 numberSquare = 0
 size = 0
@@ -24,9 +25,8 @@ def start(newNumber, newSize,randomly, pRoot):
     global canvas
     canvas = Canvas(f2, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
     global vois
-    vois = [[0]*(numberSquare+2) for e in range(numberSquare+2)]
     global tab
-    tab = [[0]*(numberSquare+2) for e in range(numberSquare+2)]
+    vois = core.initiate(numberSquare)
     if (randomly):
         randomize()
     else:
@@ -47,10 +47,10 @@ def callback(event):
 
 def resetCell():
     global tab
+    tab = core.initiate(numberSquare)
     for x in range(numberSquare):
         for y in range(numberSquare):
             canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-            tab[x+1][y+1]=0
 
 def selection():
     for x in range(numberSquare):
@@ -98,8 +98,7 @@ def adj(x,y):
 def randomize():
     resetCell()
     global tab
-    for i in range(int(((numberSquare+2)/2)**2)):
-        tab[random.randint(1,numberSquare+1)][random.randint(1,numberSquare+1)] = 1
+    tab = core.randomize(numberSquare)
     for x in range(numberSquare):
         for y in range(numberSquare):
             if tab[x+1][y+1] == 1:
