@@ -1,132 +1,75 @@
-import numpy as np
-import time, random
+import time
 from tkinter import *
-import core
+from core import Core
 
-numberSquare = 0
-size = 0
-root = ''
-canvas = 0
-vois = []
-tab = []
-ntab = []
-f2 = ""
+class View(object):
 
-def start(newNumber, newSize,randomly, pRoot):
+    def __init__(self,newNumber, newSize,randomly, pRoot):
 
-    global root
-    root = pRoot
-    global f2
-    f2 = Frame()
-    global numberSquare
-    numberSquare = newNumber
-    global size
-    size = newSize
-    global canvas
-    canvas = Canvas(f2, width=size*(numberSquare-1), height=size*(numberSquare-1), background='white')
-    global vois
-    global tab
-    vois = core.initiate(numberSquare)
-    if (randomly):
-        randomize()
-    else:
-        selection()
-    run = Button(f2,text='RUN',command=begin)
-    run.grid(row=2,columnspan=2,sticky='n')
-    rand = Button(f2,text='RANDOM',command=randomize)
-    rand.grid(row=1,column=1)
-    f2.pack()
-    root.mainloop()
+        self.root = pRoot
+        self.numberSquare = newNumber+1
+        self.core = Core(self.numberSquare)
+        self.size = newSize
+        self.randomly = randomly
+        self.root = pRoot
+        self.f2 = Frame()
+        self.canvas = Canvas(self.f2, width=self.size*(self.numberSquare-1), height=self.size*(self.numberSquare-1), background='white')
+        self.start()
 
-def callback(event):
-    x = int(event.x/size)
-    y = int(event.y/size)
-    canvas.create_rectangle(x*size,y*size,x*size+size,y*size+size, fill='black')
-    global tab
-    tab[y+1][x+1] = 1
+    def start(self):
 
-def resetCell():
-    global tab
-    tab = core.initiate(numberSquare)
-    for x in range(numberSquare):
-        for y in range(numberSquare):
-            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
+        if (self.randomly):
+            self.randomize()
+        else:
+            self.selection()
+        run = Button(self.f2,text='RUN',command=self.begin)
+        run.grid(row=2,columnspan=2,sticky='n')
+        rand = Button(self.f2,text='RANDOM',command=self.randomize)
+        rand.grid(row=1,column=1)
+        self.f2.pack()
+        self.root.mainloop()
 
-def selection():
-    for x in range(numberSquare):
-        for y in range(numberSquare):
-            canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-    canvas.bind("<Button-1>", callback)
-    canvas.grid(row=0,columnspan=2)
-    resetC = Button(f2,text = 'RESET',command=resetCell)
-    resetC.grid(row=1,column=0)
+    def action(self,event):
+        x = int(event.x/self.size)
+        y = int(event.y/self.size)
+        print(x,y)
+        self.core.switch(y,x)
+        self.canvas.create_rectangle(x*self.size,
+        y*self.size,x*self.size+self.size,y*self.size+self.size, fill='black')
 
-def begin():
+    def resetCell(self):
 
-    global tab
-    global ntab
-    ntab = np.copy(tab)
-    draw()
-    lifeCycle()
-    #print(np.matrix(ntab))
-    draw()
-    while not np.array_equal(tab,ntab):
-        time.sleep(.1)
-        tab = np.copy(ntab)
-        lifeCycle()
-        #print(np.matrix(ntab))
-        draw()
+        self.core.reset()
+        for x in range(self.numberSquare):
+            for y in range(self.numberSquare):
+                self.canvas.create_rectangle(y*self.size-self.size,
+                x*self.size-self.size,y*self.size,x*self.size, fill='white', outline='white')
+
+    def selection(self):
+        self.resetCell
+        self.canvas.bind("<Button-1>", self.action)
+        self.canvas.grid(row=0,columnspan=2)
+        resetC = Button(self.f2,text = 'RESET',command=self.resetCell)
+        resetC.grid(row=1,column=0)
+
+    def randomize(self):
+        self.core.randomize()
+        self.render()
+
+    def begin(self):
+        while self.core.lifeCycle():
+            time.sleep(.1)
+            self.render()
 
 
-def lifeCycle():
-    for x in range(numberSquare+2):
-        for y in range(numberSquare+2):
-            i = adj(x,y)
-            vois[x][y]=i
-            if (i<2 or i>3) and tab[x][y]==1:
-                ntab[x][y]=0
-            elif i==3 and tab[x][y] == 0:
-                ntab[x][y]=1
-
-def adj(x,y):
-    i = 0
-    if x > 1 and y > 1 and x < numberSquare and y < numberSquare:
-        i = test(i,x,y,-1)
-        i = test(i,x,y,1)
-    return i
-
-def randomize():
-    resetCell()
-    global tab
-    tab = core.randomize(numberSquare)
-    for x in range(numberSquare):
-        for y in range(numberSquare):
-            if tab[x+1][y+1] == 1:
-                canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
-            else:
-                canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-    canvas.grid(row=0,columnspan=2)
-
-def test(i,x,y,e):
-    if tab[x+e][y+e] == 1:
-        i+=1
-    if tab[x][y+e] == 1:
-        i+=1
-    if tab[x+e][y] == 1:
-        i+=1
-    if tab[x+e][y-e] == 1:
-        i+=1
-    return i
-
-def draw():
-    global ntab
-    global tab
-    for x in range(numberSquare):
-        for y in range(numberSquare):
-            if ntab[x+1][y+1] != tab[x+1][y+1]:
-                if ntab[x+1][y+1] == 1:
-                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='black')
+    def render(self):
+        for x in range(self.numberSquare):
+            for y in range(self.numberSquare):
+                if self.core.get(x+3,y+3):
+                    self.canvas.create_rectangle(y*self.size-self.size,
+                    x*self.size-self.size,y*self.size,x*self.size, fill='black')
                 else:
-                    canvas.create_rectangle(y*size-size,x*size-size,y*size,x*size, fill='white', outline='white')
-    canvas.grid(row=0,columnspan=2)
-    root.update()
+                    self.canvas.create_rectangle(y*self.size-self.size,
+                    x*self.size-self.size,y*self.size,x*self.size, fill='white', outline='white')
+        self.canvas.grid(row=0,columnspan=2)
+        self.root.update()

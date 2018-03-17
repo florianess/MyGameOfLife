@@ -1,4 +1,4 @@
-import view
+from view import View
 from tkinter import *
 
 def start():
@@ -6,6 +6,7 @@ def start():
     nSize = int(size.get())
     randoml = intGr.get()
     f1.destroy()
+    gol = View(nNumberSquare,nSize,randoml,root)
     view.start(nNumberSquare,nSize,randoml,root)
 
 root = Tk()
