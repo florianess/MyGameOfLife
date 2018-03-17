@@ -13,16 +13,16 @@ class Core(object):
             self.tab[random.randint(1,self.matrixSize-1)][random.randint(1,self.matrixSize-1)] = 1
 
     def lifeCycle(self):
-        vois = [[0]*(self.matrixSize) for e in range(self.matrixSize)]
         nTab = [[0]*(self.matrixSize) for e in range(self.matrixSize)]
         for x in range(self.matrixSize):
             for y in range(self.matrixSize):
                 i = self.adj(x,y)
-                vois[x][y]=i
-                if (i<2 or i>3) and self.tab[x][y]==1:
-                    nTab[x][y]=0
-                elif i==3 and self.tab[x][y] == 0:
+                if ( i<2 or i>3 ) and self.tab[x][y] == 1:
+                    nTab[x][y] = 0
+                elif i == 3 and self.tab[x][y] == 0:
                     nTab[x][y]=1
+                else:
+                    nTab[x][y]=self.tab[x][y]
         self.tab = np.copy(nTab)
         return True
 
