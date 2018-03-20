@@ -6,6 +6,7 @@ class Core(object):
     def __init__(self,numberSquare):
         self.matrixSize = numberSquare+5
         self.tab = np.zeros((self.matrixSize,self.matrixSize),dtype=int)
+        self.cells = {}
 
     def randomize(self):
         self.reset()
@@ -49,7 +50,8 @@ class Core(object):
         return i
 
     def switch(self,x,y):
-        self.tab[x+4][y+4] = 1;
+        self.tab[x+4,y+4] = 1;
+        self.addCell(x+4,y+4)
 
     def reset(self):
         self.tab = [[0]*(self.matrixSize) for e in range(self.matrixSize)]
@@ -59,3 +61,13 @@ class Core(object):
 
     def log(self):
         print (np.matrix(self.tab))
+
+    def addCell(self,x,y):
+
+        for i in range (3):
+            if not x+i-1 in self.cells:
+                self.cells[x+i-1] = []
+            for n in range (3):
+                if not y+1-n in self.cells[x+i-1]:
+                    self.cells[x+i-1].append(y+1-n)
+            print (self.cells)

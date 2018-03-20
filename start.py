@@ -33,6 +33,5 @@ for i in range(2):
 start = Button(f1,text='START',command=start)
 
 start.grid(row=2,columnspan=2,sticky='n')
-
 f1.pack()
 root.mainloop()
