@@ -17,7 +17,6 @@ class View(object):
         self.start()
 
     def start(self):
-
         if (self.randomly):
             self.randomize()
         else:
@@ -38,7 +37,6 @@ class View(object):
         y*self.size,x*self.size+self.size,y*self.size+self.size, fill='black')
 
     def resetCell(self):
-
         self.core.reset()
         for x in range(self.numberSquare):
             for y in range(self.numberSquare):

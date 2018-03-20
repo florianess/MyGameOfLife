@@ -5,7 +5,7 @@ class Core(object):
 
     def __init__(self,numberSquare):
         self.matrixSize = numberSquare+5
-        self.tab = [[0]*(self.matrixSize) for e in range(self.matrixSize)]
+        self.tab = np.zeros((self.matrixSize,self.matrixSize),dtype=int)
 
     def randomize(self):
         self.reset()
@@ -13,7 +13,8 @@ class Core(object):
             self.tab[random.randint(1,self.matrixSize-1)][random.randint(1,self.matrixSize-1)] = 1
 
     def lifeCycle(self):
-        nTab = [[0]*(self.matrixSize) for e in range(self.matrixSize)]
+        self.log()
+        nTab = np.zeros((self.matrixSize,self.matrixSize),dtype=int)
         for x in range(self.matrixSize):
             for y in range(self.matrixSize):
                 i = self.adj(x,y)
@@ -23,8 +24,11 @@ class Core(object):
                     nTab[x][y]=1
                 else:
                     nTab[x][y]=self.tab[x][y]
-        self.tab = np.copy(nTab)
-        return True
+        if (not (self.tab==nTab).all()):
+            self.tab = np.copy(nTab)
+            return True
+        else:
+            return False
 
     def adj(self,x,y):
         i = 0
@@ -45,10 +49,13 @@ class Core(object):
         return i
 
     def switch(self,x,y):
-        self.tab[x+3][y+3] = 1;
+        self.tab[x+4][y+4] = 1;
 
     def reset(self):
         self.tab = [[0]*(self.matrixSize) for e in range(self.matrixSize)]
 
     def get(self,x,y):
         return self.tab[x][y]
+
+    def log(self):
+        print (np.matrix(self.tab))
